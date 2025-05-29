@@ -31,6 +31,15 @@ The drive motor is initialized using the encoder motor factory. Additionally, a 
 
 The robot has **three ultrasonic sensors**, each connected to a different port: I1 (front), I5 (right), and I3 (left).  
 
+
+## Step-Based Turning Logic
+
+
+
+
+
+
+
 ## Camera and Color Detection
 
 In this project, we use the `OpenCV library` for computer vision to detect obstacles of specific colors (red and green) and to measure their height within the camera frame.
