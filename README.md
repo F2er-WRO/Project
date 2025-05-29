@@ -1,4 +1,5 @@
-# WRO FUTURE ENGINEERS 2025
+# WRO FUTURE ENGINEERS 2025: Team F2er
+
 ## Build, Compile and Upload Process
 
 The project was developed using **Python** as the programming language. All source code was written and edited using **Visual Studio Code (VS Code)**, along with the official Python extension for syntax highlighting and code assistance.
