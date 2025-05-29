@@ -14,6 +14,9 @@ To upload and run the program on the robot, we followed these steps:
 - `opencv-python` – for image processing and color detection
 - `numpy` – for numerical operations and array handling
 - `fischertechnik` – to communicate with motors, servos, and sensors
+
+## Electromechanical components
+
   
 ## Camera and Color Detection
 
