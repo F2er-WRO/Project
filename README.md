@@ -19,7 +19,7 @@ To upload and run the program on the robot, we followed these steps:
 
 In this project, we use the OpenCV library for computer vision to detect obstacles of specific colors (red and green) and to measure their height within the camera frame.
 
-Before detecting the color, we convert each frame from the default **BGR (Blue, Green, Red)** format to the **HSV (Hue, Saturation, Value)** color space. This improves color detection accuracy under different lighting conditions by separating color (hue) from brightness (value).
+Before detecting the color, we convert each frame from the default **BGR (Blue, Green, Red)** format to the **HSV (Hue, Saturation, Value)** color space. This improves color detection accuracy under different lighting conditions by separating color (hue) from brightness (value). This way we made sure that the color detection does not depend on the brightness and lighting in the room. 
 
 We define specific HSV value ranges for detecting **red** and **green** regions. Red is split into two ranges due to its position at both ends of the hue spectrum:
 
@@ -31,3 +31,5 @@ RED_UPPER2 = np.array([180, 255, 255])
 
 GREEN_LOWER = np.array([40, 70, 50])
 GREEN_UPPER = np.array([80, 255, 255])
+
+Later, we used this logic to determine which obstacle is the closest to the robot, meaning the bigger number of pixels of a certain color point to the traffic sign in front of the camera. 
