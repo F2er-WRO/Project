@@ -14,7 +14,7 @@ To upload and run the program on the robot, we followed these steps:
 - `opencv-python` – for image processing and color detection
 - `numpy` – for numerical operations and array handling
 - `fischertechnik` – to communicate with motors, servos, and sensors
-- 
+  
 ## Camera and Color Detection
 
 In this project, we use the OpenCV library for computer vision to detect obstacles of specific colors (red and green) and to measure their height within the camera frame.
