@@ -16,11 +16,24 @@ To upload and run the program on the robot, we followed these steps:
 - `fischertechnik` – to communicate with motors, servos, and sensors
 
 ## Electromechanical components
+At the start of the program, we initialize all the hardware components using the official `fischertechnik` Python library. These include the controller, sensors, motors, camera, and counters. Each component is created through its respective factory method provided by the Software Development Kit.
 
-  
+```python
+txt_factory.init()
+txt_factory.init_input_factory()
+txt_factory.init_motor_factory()
+txt_factory.init_servomotor_factory()
+txt_factory.init_counter_factory()
+txt_factory.init_usb_factory()
+txt_factory.init_camera_factory()
+```
+The drive motor is initialized using the encoder motor factory. Additionally, a motor step counter is created and linked to the encoder motor to track the number of steps taken during movement. The steering mechanism is controlled by a separate servomotor, which allows the robot to adjust its direction in real time based on obstacle detection and navigation logic.
+
+The robot has **three ultrasonic sensors**, each connected to a different port: I1 (front), I5 (right), and I3 (left).  
+
 ## Camera and Color Detection
 
-In this project, we use the OpenCV library for computer vision to detect obstacles of specific colors (red and green) and to measure their height within the camera frame.
+In this project, we use the `OpenCV library` for computer vision to detect obstacles of specific colors (red and green) and to measure their height within the camera frame.
 
 Before detecting the color, we convert each frame from the default **BGR (Blue, Green, Red)** format to the **HSV (Hue, Saturation, Value)** color space. This improves color detection accuracy under different lighting conditions by separating color (hue) from brightness (value). This way we made sure that the color detection does not depend on the brightness and lighting in the room. 
 
