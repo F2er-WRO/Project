@@ -31,5 +31,6 @@ RED_UPPER2 = np.array([180, 255, 255])
 
 GREEN_LOWER = np.array([40, 70, 50])
 GREEN_UPPER = np.array([80, 255, 255])
+```
 
 Later, we used this logic to determine which obstacle is the closest to the robot, meaning the bigger number of pixels of a certain color point to the traffic sign in front of the camera. 
