@@ -51,7 +51,7 @@ The videos are public and posted on YouTube.
 
 
 ## GitHub utilization
-Our repository is on the following link: https://github.com/orgs/F2er-WRO/repositories
+Our repository is on the following link: https://github.com/F2er-WRO/Project
 
 It includes the codes for the robot setup such as camera, controller and display. Two codes for the upload and run process, as well as the `open_challenge.py` and `obstacle_challenge.py`. 
 
