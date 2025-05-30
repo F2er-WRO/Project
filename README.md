@@ -1,5 +1,42 @@
 # WRO FUTURE ENGINEERS 2025: Team F2er
 
+
+## Pictures - Team and vehicle
+
+### Team
+
+
+
+
+### Vehicle 
+
+The vehicle is built using the `fischertechink STEM Coding Competition Robot Kit`. 
+
+
+
+
+
+
+
+
+## Performance Videos
+
+The videos are public and posted on YouTube.
+
+1) Open Challenge: 
+
+2) Obstacle Challenge: 
+
+
+
+## GitHub utilization
+[GitHub repository](https://github.com/orgs/F2er-WRO/repositories)
+
+It includes the codes for the robot setup such as camera, controller and display. Two codes for the upload and run process, as well as the `open_challenge.py` and `obstacle_challenge.py`. 
+
+Lastly, the repository includes the README.md file suitable with the following rules of the WRO Organization. 
+
+
 ## Build, Compile and Upload Process
 
 The project was developed using **Python** as the programming language. All source code was written and edited using `Visual Studio Code (VS Code)`.
@@ -16,14 +53,14 @@ To upload and run the program on the robot, we followed these steps:
 - `numpy` – for numerical operations and array handling
 - `fischertechnik` – to communicate with motors, servos, and sensors
 
-## Mobility Managment
+## Mobility Management 
 We decided to use the official `fischertechnik STEM Coding Competition kit`, which was specifically developed for this "Future Engineers" competition category of the World Robot Olympiad. The base was assembled strictly following the official step-by-step instructions provided in the manual, ensuring stable construction, proper wheel alignment, and optimal weight distribution.
 
-The robot’s movement is powered by a high-torque encoder motor, which provides precise control over driving speed and distance. For turning, the robot uses Ackermann steering controlled by a **Micro Servo 4.8/6V**, enabling smooth directional changes without wheel slippage. This setup allows for effective cornering, essential for maneuvering turns in both challenges.
+The drive motor is initialized using the encoder motor factory. Additionally, a motor step counter is created and linked to the encoder motor to track the number of steps taken during movement. The steering mechanism is controlled by a separate servomotor **Micro Servo 4.8/6V**, which allows the robot to adjust its direction in real time based on obstacle detection and navigation logic.
 
-We began assembling the robot by constructing the lower base frame using red and black structural blocks, followed by adding the rear wheels with axle holders and spacers for stability. Next, we installed the encoder motor to complete the drive system. The front steering mechanism is supported by the Micro Servo. The front wheels were then attached to the steering links, completing the basic mobility structure. Afterwards, we positioned the TXT 4.0 controller on top of the base frame and connected all cables from the sensors, motor, camera, and servo to the corresponding ports.
+We began assembling the robot by constructing the lower base frame using red and black structural blocks, followed by adding the rear wheels with axle holders and spacers for stability. Next, we installed the encoder motor to complete the drive system. The front steering mechanism is supported by the Micro Servo. The front wheels were then attached to the steering links, completing the basic mobility structure. Afterwards, we positioned the **TXT 4.0 controller** on top of the base frame and connected all cables from the sensors, motor, camera, and servo to the corresponding ports.
 
-At the start of the program, we initialize all the hardware components using the official `fischertechnik` Python library. These include the controller, sensors, motors, camera, and counters. Each component is created through its respective factory method provided by the Software Development Kit.
+At the start of the program, we initialize all the hardware components using the official `fischertechnik` Python library. These include the controller, sensors, motors, camera, and counters.
 
 ```python
 txt_factory.init()
@@ -37,12 +74,9 @@ txt_factory.init_camera_factory()
 
 ## Power and Sense Management
 
-The robot is powered by an 8.4V 1800mAh NiMH battery pack with short circuit protection, recharged using the standard charger from the robot kit introduced earlier.
+The robot is powered by an **8.4V 1800mAh NiMH battery pack** with short circuit protection, recharged using the standard charger from the robot kit introduced earlier.
 
-
-The drive motor is initialized using the encoder motor factory. Additionally, a motor step counter is created and linked to the encoder motor to track the number of steps taken during movement. The steering mechanism is controlled by a separate servomotor, which allows the robot to adjust its direction in real time based on obstacle detection and navigation logic.
-
-The robot has **three ultrasonic sensors**, each connected to a different port: I1 (front), I5 (right), and I3 (left).  
+The robot has **three ultrasonic sensors**, each connected to a different port: ***I1 (front), I5 (right), and I3 (left)***. Each sensor consists of a dual transducer that sends and receives ultrasonic pulses, enabling accurate distance calculations in real time. The sensors were securely connected using the standard plug-and-cable system provided in the kit, following the official `fischertechnik` assembly guidelines. Their placement was chosen to provide full coverage on three sides of the robot, ensuring it can orient itself within confined environments and react to dynamic obstacles.
 
 
 ## Obstacle Detection
@@ -126,35 +160,3 @@ def zaobidji_prepreku(frame, boje):
     
     print("Najbliza prepreka:", boja_blizu)
 ```
-
-## Pictures - Team and vehicle
-
-### Team
-
-
-
-
-### Vehicle 
-
-The vehicle is built using the `fischertechink STEM Coding Competition Robot Kit`. 
-
-
-
-
-
-
-
-
-## Performance Videos
-
-
-
-
-
-
-## GitHub utilization
-[GitHub repository](https://github.com/orgs/F2er-WRO/repositories)
-
-It includes the codes for the robot setup such as camera, controller and display. Two codes for the upload and run process, as well as the `open_challenge.py` and `obstacle_challenge.py`. 
-
-Lastly, the repository includes the README.md file suitable with the following rules of the WRO Organization. 
