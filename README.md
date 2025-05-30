@@ -15,7 +15,6 @@ Team information:
 •	Country: Zagreb, Croatia
 
 <p align="center">
-  <img src="images/team1.jpg" alt="Team1" width="300"/>
 </p>
 
 
@@ -44,9 +43,9 @@ The vehicle is built using the `fischertechink STEM Coding Competition Robot Kit
 
 The videos are public and posted on YouTube.
 
-1) Open Challenge: https://youtube.com/shorts/w1JASEXlZe4?feature=share
+1) Open Challenge: https://youtube.com/shorts/FNWYoWpSo5U?feature=share
 
-2) Obstacle Challenge: https://youtube.com/shorts/Kh2xObjqXJc?feature=share
+2) Obstacle Challenge: https://youtube.com/shorts/vl-P6Tf0zsA?feature=share
 
 
 
