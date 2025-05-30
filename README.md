@@ -16,7 +16,7 @@ To upload and run the program on the robot, we followed these steps:
 - `numpy` – for numerical operations and array handling
 - `fischertechnik` – to communicate with motors, servos, and sensors
 
-## Electromechanical components
+## Mobility Managment
 At the start of the program, we initialize all the hardware components using the official `fischertechnik` Python library. These include the controller, sensors, motors, camera, and counters. Each component is created through its respective factory method provided by the Software Development Kit.
 
 ```python
@@ -70,7 +70,7 @@ while (counter < 13):
             counter=counter + 1
 ```
 
-## Camera and Color Detection
+## Obstacle Detection
 
 In this project, we used the `OpenCV library` for computer vision to detect obstacles of specific colors and to measure their height within the camera frame.
 
@@ -113,3 +113,20 @@ def zaobidji_prepreku(frame, boje):
     
     print("Najbliza prepreka:", boja_blizu)
 ```
+
+## Pictures - Team and vehicle
+
+
+
+
+
+
+
+## Performance Videos
+
+
+
+
+
+
+## GitHub utilization
