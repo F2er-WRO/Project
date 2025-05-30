@@ -98,10 +98,7 @@ def prati_zid(counter):
     print( "2Lijevi: ", TXT_M_I3_ultrasonic_distance_meter.get_distance(), "2Desni: ", TXT_M_I5_ultrasonic_distance_meter.get_distance())
     print(lijevo)
 
-    while (counter<4):
-  
-
-
+    while (counter<12): ##tri puna kruga
         # Održavanje udaljenosti od zida
         if(lijevo == 0):
 
