@@ -17,6 +17,13 @@ To upload and run the program on the robot, we followed these steps:
 - `fischertechnik` – to communicate with motors, servos, and sensors
 
 ## Mobility Managment
+
+
+
+
+
+
+## Power and Sense Management
 At the start of the program, we initialize all the hardware components using the official `fischertechnik` Python library. These include the controller, sensors, motors, camera, and counters. Each component is created through its respective factory method provided by the Software Development Kit.
 
 ```python
@@ -33,7 +40,8 @@ The drive motor is initialized using the encoder motor factory. Additionally, a 
 The robot has **three ultrasonic sensors**, each connected to a different port: I1 (front), I5 (right), and I3 (left).  
 
 
-## Step-Based Turning Logic
+## Obstacle Detection
+### Step-Based Turning Logic
 We implemented step-based turning logic using **a counter variable** to track the number of completed turns. The robot continuously evaluates distances using its left and right ultrasonic sensors. 
 
 When it detects a corner, it triggers a turning function `turn_left()` or `turn_right()` that uses the servomotor for steering and the encoder motor for movement. This modular approach allows the robot to navigate around the central box by following walls and turning only when necessary.
@@ -70,7 +78,7 @@ while (counter < 13):
             counter=counter + 1
 ```
 
-## Obstacle Detection
+### Camera and Color Detection
 
 In this project, we used the `OpenCV library` for computer vision to detect obstacles of specific colors and to measure their height within the camera frame.
 
@@ -116,6 +124,16 @@ def zaobidji_prepreku(frame, boje):
 
 ## Pictures - Team and vehicle
 
+### Team
+
+
+
+
+### Vehicle 
+
+The vehicle is built using the `fischertechink STEM Coding Competition Robot Kit`. 
+
+
 
 
 
@@ -130,3 +148,8 @@ def zaobidji_prepreku(frame, boje):
 
 
 ## GitHub utilization
+[GitHub repository](https://github.com/orgs/F2er-WRO/repositories)
+
+It includes the codes for the robot setup such as camera, controller and display. Two codes for the upload and run process, as well as the `open_challenge.py` and `obstacle_challenge.py`. 
+
+Lastly, the repository includes the README.md file suitable with the following rules of the WRO Organization. 
