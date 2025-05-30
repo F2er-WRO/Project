@@ -15,6 +15,7 @@ Team information:
 •	Country: Zagreb, Croatia
 
 <p align="center">
+  <img src="images/team.jpg" alt="Team" width="300"/>
 </p>
 
 
@@ -199,5 +200,3 @@ def zaobidji_prepreku(frame, boje):
     
     print("Najbliza prepreka:", boja_blizu)
 ```
-
-In the Obstacle Challenge, we decided to start from a parallel parking position. The robot first moves backward until there's enough space, then turns left to exit the parking spot. 
