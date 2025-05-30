@@ -17,13 +17,12 @@ To upload and run the program on the robot, we followed these steps:
 - `fischertechnik` – to communicate with motors, servos, and sensors
 
 ## Mobility Managment
+We decided to use the official `fischertechnik STEM Coding Competition kit`, which was specifically developed for this "Future Engineers" competition category of the World Robot Olympiad. The base was assembled strictly following the official step-by-step instructions provided in the manual, ensuring stable construction, proper wheel alignment, and optimal weight distribution.
 
+The robot’s movement is powered by a high-torque encoder motor, which provides precise control over driving speed and distance. For turning, the robot uses Ackermann steering controlled by a **Micro Servo 4.8/6V**, enabling smooth directional changes without wheel slippage. This setup allows for effective cornering, essential for maneuvering turns in both challenges.
 
+We began assembling the robot by constructing the lower base frame using red and black structural blocks, followed by adding the rear wheels with axle holders and spacers for stability. Next, we installed the encoder motor to complete the drive system. The front steering mechanism is supported by the Micro Servo. The front wheels were then attached to the steering links, completing the basic mobility structure. Afterwards, we positioned the TXT 4.0 controller on top of the base frame and connected all cables from the sensors, motor, camera, and servo to the corresponding ports.
 
-
-
-
-## Power and Sense Management
 At the start of the program, we initialize all the hardware components using the official `fischertechnik` Python library. These include the controller, sensors, motors, camera, and counters. Each component is created through its respective factory method provided by the Software Development Kit.
 
 ```python
@@ -35,6 +34,12 @@ txt_factory.init_counter_factory()
 txt_factory.init_usb_factory()
 txt_factory.init_camera_factory()
 ```
+
+## Power and Sense Management
+
+The robot is powered by an 8.4V 1800mAh NiMH battery pack with short circuit protection, recharged using the standard charger from the robot kit introduced earlier.
+
+
 The drive motor is initialized using the encoder motor factory. Additionally, a motor step counter is created and linked to the encoder motor to track the number of steps taken during movement. The steering mechanism is controlled by a separate servomotor, which allows the robot to adjust its direction in real time based on obstacle detection and navigation logic.
 
 The robot has **three ultrasonic sensors**, each connected to a different port: I1 (front), I5 (right), and I3 (left).  
