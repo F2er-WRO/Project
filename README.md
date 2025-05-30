@@ -2,7 +2,7 @@
 
 ## Build, Compile and Upload Process
 
-The project was developed using **Python** as the programming language. All source code was written and edited using **Visual Studio Code (VS Code)**, along with the official Python extension for syntax highlighting and code assistance.
+The project was developed using **Python** as the programming language. All source code was written and edited using `Visual Studio Code (VS Code)`.
 
 To upload and run the program on the robot, we followed these steps:
 
@@ -34,7 +34,7 @@ The robot has **three ultrasonic sensors**, each connected to a different port: 
 
 
 ## Step-Based Turning Logic
-We implemented step-based turning logic using a counter variable to track the number of completed turns. The robot continuously evaluates distances using its left and right ultrasonic sensors. 
+We implemented step-based turning logic using **a counter variable** to track the number of completed turns. The robot continuously evaluates distances using its left and right ultrasonic sensors. 
 
 When it detects a corner, it triggers a turning function `turn_left()` or `turn_right()` that uses the servomotor for steering and the encoder motor for movement. This modular approach allows the robot to navigate around the central box by following walls and turning only when necessary.
 
@@ -56,7 +56,8 @@ def skreni_lijevo():
     print("zid ", TXT_M_I3_ultrasonic_distance_meter.get_distance())
 ```
 
-We than used the counter to measure when three full laps have been completed. 
+We than used the counter to measure when **three full laps** have been completed. 
+
 ```python
 while (counter < 13):
     if lijevo == 0:
@@ -71,7 +72,7 @@ while (counter < 13):
 
 ## Camera and Color Detection
 
-In this project, we use the `OpenCV library` for computer vision to detect obstacles of specific colors (red and green) and to measure their height within the camera frame.
+In this project, we used the `OpenCV library` for computer vision to detect obstacles of specific colors and to measure their height within the camera frame.
 
 Before detecting the color, we convert each frame from the default **BGR (Blue, Green, Red)** format to the **HSV (Hue, Saturation, Value)** color space. This improves color detection accuracy under different lighting conditions by separating color (hue) from brightness (value). This way we made sure that the color detection does not depend on the brightness and lighting in the room. 
 
@@ -87,4 +88,28 @@ GREEN_LOWER = np.array([40, 70, 50])
 GREEN_UPPER = np.array([80, 255, 255])
 ```
 
-Later, we used this logic to determine which obstacle is the closest to the robot, meaning the bigger number of pixels of a certain color point to the traffic sign in front of the camera. 
+After, we split the frame the camera sees into three parts, left, right and center.
+
+The `max_height()` function calculates the height of the tallest detected colored object by finding external contours in the mask. It returns `h` which is the maximum bounding rectangle height in that area.
+
+Combining the HSV value of red and green and the height of the shape the camera sees, we counted **the number of pixels**. We used this logic to determine which obstacle is the closest to the robot, meaning the bigger number of pixels of a certain color point to the traffic sign in front of the camera. 
+
+```python
+def zaobidji_prepreku(frame, boje):
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    red_mask1 = cv2.inRange(hsv, RED_LOWER1, RED_UPPER1)
+    red_mask2 = cv2.inRange(hsv, RED_LOWER2, RED_UPPER2)
+    red_mask = cv2.bitwise_or(red_mask1, red_mask2)
+    green_mask = cv2.inRange(hsv, GREEN_LOWER, GREEN_UPPER)
+    
+    hr=max_height(red_mask)
+    hg=max_height(green_mask)
+    print("crvena i zelena visina ", hr, hg)
+    boja_blizu = "unknown"
+    if hr > hg and hr > 0:
+        boja_blizu='red'
+    elif hg > 0:
+        boja_blizu= "green"
+    
+    print("Najbliza prepreka:", boja_blizu)
+```
