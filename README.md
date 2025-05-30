@@ -34,12 +34,17 @@ The robot has **three ultrasonic sensors**, each connected to a different port: 
 
 
 ## Step-Based Turning Logic
+We implemented step-based turning logic using a counter variable to track the number of completed turns. The robot continuously evaluates distances using its left and right ultrasonic sensors. 
+When it detects a corner, it triggers a turning function `turn_left()` or `turn_right()` that uses the servomotor for steering and the encoder motor for movement. This modular approach allows the robot to navigate around the central box by following walls and turning only when necessary.
+
+```python
 
 
 
 
 
 
+```
 
 ## Camera and Color Detection
 
