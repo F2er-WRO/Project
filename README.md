@@ -35,15 +35,38 @@ The robot has **three ultrasonic sensors**, each connected to a different port: 
 
 ## Step-Based Turning Logic
 We implemented step-based turning logic using a counter variable to track the number of completed turns. The robot continuously evaluates distances using its left and right ultrasonic sensors. 
+
 When it detects a corner, it triggers a turning function `turn_left()` or `turn_right()` that uses the servomotor for steering and the encoder motor for movement. This modular approach allows the robot to navigate around the central box by following walls and turning only when necessary.
 
 ```python
+def skreni_lijevo():
+    print("Skrecem lijevo za 90")
+    print(TXT_M_I3_ultrasonic_distance_meter.get_distance())
+    TXT_M_M1_encodermotor.set_speed(150, TXT_M_M1_encodermotor.CCW)
+    TXT_M_S1_servomotor.set_position(350)  #sharp left
+    #TXT_M_M1_encodermotor.start()
+    time.sleep(2)  # drive to the right
+    #TXT_M_M1_encodermotor.stop()
+    TXT_M_S1_servomotor.set_position(200)  #puts wheels back to the straight position
+    time.sleep(0.2)
+    while(TXT_M_I3_ultrasonic_distance_meter.get_distance()>50):
+       time.sleep(0.5)
+       print("ravno ", TXT_M_I3_ultrasonic_distance_meter.get_distance())
+       TXT_M_M1_encodermotor.set_speed(260, TXT_M_M1_encodermotor.CCW)
+    print("zid ", TXT_M_I3_ultrasonic_distance_meter.get_distance())
+```
 
-
-
-
-
-
+We than used the counter to measure when three full laps have been completed. 
+```python
+while (counter < 13):
+    if lijevo == 0:
+        if TXT_M_I5_ultrasonic_distance_meter.get_distance() > 50:
+            skreni_desno()
+            counter=counter + 1
+    if lijevo == 1:
+        if TXT_M_I3_ultrasonic_distance_meter.get_distance() > 50:
+            skreni_lijevo()
+            counter=counter + 1
 ```
 
 ## Camera and Color Detection
