@@ -30,6 +30,7 @@ The vehicle is built using the `fischertechink STEM Coding Competition Robot Kit
   <br/>
   <img src="images/vehicle3.jpg" alt="Vehicle 3" width="294"/>
   <img src="images/vehicle4.jpg" alt="Vehicle 4" width="250"/>
+  <img src="images/vehicle6.jpg" alt="Vehicle 6" width="157"/>
 </p>
 
 
