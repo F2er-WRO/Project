@@ -143,10 +143,10 @@ def skreni_lijevo():
     print("zid ", TXT_M_I3_ultrasonic_distance_meter.get_distance())
 ```
 
-We than used the counter to measure when **three full laps** have been completed. When it reaches 13, it stops at the starting point.
+We than used the counter to measure when **three full laps** have been completed. When it reaches 12, it stops at the starting point.
 
 ```python
-while (counter < 13):
+while (counter < 12):
     if lijevo == 0:
         if TXT_M_I5_ultrasonic_distance_meter.get_distance() > 50:
             skreni_desno()
