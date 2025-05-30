@@ -4,6 +4,16 @@
 ## Pictures - Team and vehicle
 
 ### Team
+Team information:
+
+•	Name: F2er
+
+•	Members: Ana Petrović, Bruna Vlatković, Patrik Vranješ
+
+•	Organization: Faculty of Electrical Engineering and Computing
+
+•	Country: Zagreb, Croatia
+
 
 
 
@@ -41,12 +51,16 @@ Lastly, the repository includes the README.md file suitable with the following r
 
 The project was developed using **Python** as the programming language. All source code was written and edited using `Visual Studio Code (VS Code)`.
 
-To upload and run the program on the robot, we followed these steps:
+To connect and control the robot remotely, we used the `paramiko` package, which allowed us to access the TXT 4.0 controller via SSH. 
 
-1. Make sure the **Fischertechnik TXT Controller** and your **PC are connected to the same network** (Wi-Fi from the mobile hotspot).
-2. Locate the TXT Controller’s **IP address** from its interface.
-3. In VS Code, after writing and saving the Python files, connect to the robot using the **"Upload and Run File"** option to transfer the Python script to the controller and start execution.
-4. The robot will automatically begin executing the code once the upload completes and by clicking the run button on its interface.
+To make this work, we connected both the robot and our laptop to the same mobile hotspot, so they were on the same network. This was necessary because we had to include **the controller’s IP address** in the code. 
+
+During the early stages of development, we tested our code by running scripts directly through the command line (using *python scripts/upload_and_run.py*). 
+
+To start the robot in a way the rules of the competition provide, we followed these steps:
+
+1. In VS Code, after writing and saving the Python files, connect to the robot using the **"Upload and Run File"** option to transfer the Python script to the controller and start execution.
+2. The robot will automatically begin executing the code once the upload completes and by clicking the run button on its interface.
 
 ### Additional Python Libraries Used:
 - `opencv-python` – for image processing and color detection
@@ -56,9 +70,15 @@ To upload and run the program on the robot, we followed these steps:
 ## Mobility Management 
 We decided to use the official `fischertechnik STEM Coding Competition kit`, which was specifically developed for this "Future Engineers" competition category of the World Robot Olympiad. The base was assembled strictly following the official step-by-step instructions provided in the manual, ensuring stable construction, proper wheel alignment, and optimal weight distribution.
 
-The drive motor is initialized using the encoder motor factory. Additionally, a motor step counter is created and linked to the encoder motor to track the number of steps taken during movement. The steering mechanism is controlled by a separate servomotor **Micro Servo 4.8/6V**, which allows the robot to adjust its direction in real time based on obstacle detection and navigation logic.
+The drive motor is initialized using the encoder motor factory. Additionally, a motor step counter is created and linked to the encoder motor to track the number of steps taken during movement. 
 
-We began assembling the robot by constructing the lower base frame using red and black structural blocks, followed by adding the rear wheels with axle holders and spacers for stability. Next, we installed the encoder motor to complete the drive system. The front steering mechanism is supported by the Micro Servo. The front wheels were then attached to the steering links, completing the basic mobility structure. Afterwards, we positioned the **TXT 4.0 controller** on top of the base frame and connected all cables from the sensors, motor, camera, and servo to the corresponding ports.
+The steering mechanism is controlled by a separate servomotor **Micro Servo 4.8/6V**, which allows the robot to adjust its direction in real time based on obstacle detection and navigation logic.
+
+We began assembling the robot by constructing the lower base frame using red and black structural blocks, followed by adding the rear wheels with axle holders and spacers for stability. Next, we installed the encoder motor to complete the drive system. 
+
+The front steering mechanism is supported by the Micro Servo. The front wheels were then attached to the steering links, completing the basic mobility structure. 
+
+Afterwards, we positioned the **TXT 4.0 controller** on top of the base frame and connected all cables from the sensors, motor, camera, and servo to the corresponding ports.
 
 At the start of the program, we initialize all the hardware components using the official `fischertechnik` Python library. These include the controller, sensors, motors, camera, and counters.
 
@@ -76,11 +96,20 @@ txt_factory.init_camera_factory()
 
 The robot is powered by an **8.4V 1800mAh NiMH battery pack** with short circuit protection, recharged using the standard charger from the robot kit introduced earlier.
 
-The robot has **three ultrasonic sensors**, each connected to a different port: ***I1 (front), I5 (right), and I3 (left)***. Each sensor consists of a dual transducer that sends and receives ultrasonic pulses, enabling accurate distance calculations in real time. The sensors were securely connected using the standard plug-and-cable system provided in the kit, following the official `fischertechnik` assembly guidelines. Their placement was chosen to provide full coverage on three sides of the robot, ensuring it can orient itself within confined environments and react to dynamic obstacles.
+The robot has **three ultrasonic sensors**, each connected to a different port: ***I1 (front), I5 (right), and I3 (left)***. 
+
+Each sensor consists of a dual transducer that sends and receives ultrasonic pulses, enabling accurate distance calculations in real time. The sensors were securely connected using the standard plug-and-cable system provided in the kit, following the official `fischertechnik` assembly guidelines. 
+
+Their placement was chosen to provide full coverage on three sides of the robot, ensuring it can orient itself within confined environments and react to dynamic obstacles.
 
 
 ## Obstacle Detection
 ### Step-Based Turning Logic
+
+For the Open Challenge, our idea was to let the robot check the distances from the left and right sensors, compare them, and choose **the smaller one which means the robot is closer to the inner wall on that side**. Then it adjusts its path to go around that side.
+
+We spent time testing and adjusting values like driving speed, turning speed, and how sharp the turns are, to make everything run smoothly. 
+
 We implemented step-based turning logic using **a counter variable** to track the number of completed turns. The robot continuously evaluates distances using its left and right ultrasonic sensors. 
 
 When it detects a corner, it triggers a turning function `turn_left()` or `turn_right()` that uses the servomotor for steering and the encoder motor for movement. This modular approach allows the robot to navigate around the central box by following walls and turning only when necessary.
@@ -103,7 +132,7 @@ def skreni_lijevo():
     print("zid ", TXT_M_I3_ultrasonic_distance_meter.get_distance())
 ```
 
-We than used the counter to measure when **three full laps** have been completed. 
+We than used the counter to measure when **three full laps** have been completed. When it reaches 13, it stops at the starting point.
 
 ```python
 while (counter < 13):
