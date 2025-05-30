@@ -22,6 +22,15 @@ Team information:
 
 The vehicle is built using the `fischertechink STEM Coding Competition Robot Kit`. 
 
+<p align="center">
+  <img src="images/vehicle1.jpg" alt="Vehicle 1" width="200"/>
+  <img src="images/vehicle2.jpg" alt="Vehicle 2" width="200"/>
+  <img src="images/vehicle5.jpg" alt="Vehicle 5" width="200"/>
+  <br/>
+  <img src="images/vehicle3.jpg" alt="Vehicle 3" width="294"/>
+  <img src="images/vehicle4.jpg" alt="Vehicle 4" width="250"/>
+</p>
+
 
 
 
@@ -40,7 +49,7 @@ The videos are public and posted on YouTube.
 
 
 ## GitHub utilization
-[GitHub repository](https://github.com/orgs/F2er-WRO/repositories)
+Our repository is on the following link: https://github.com/orgs/F2er-WRO/repositories
 
 It includes the codes for the robot setup such as camera, controller and display. Two codes for the upload and run process, as well as the `open_challenge.py` and `obstacle_challenge.py`. 
 
