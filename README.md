@@ -14,8 +14,9 @@ Team information:
 
 •	Country: Zagreb, Croatia
 
-
-
+<p align="center">
+  <img src="images/team.jpg" alt="Team" width="250"/>
+</p>
 
 
 ### Vehicle 
