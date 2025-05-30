@@ -189,3 +189,5 @@ def zaobidji_prepreku(frame, boje):
     
     print("Najbliza prepreka:", boja_blizu)
 ```
+
+In the Obstacle Challenge, we decided to start from a parallel parking position. The robot first moves backward until there's enough space, then turns left to exit the parking spot. 
