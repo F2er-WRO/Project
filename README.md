@@ -46,7 +46,7 @@ The videos are public and posted on YouTube.
 
 1) Open Challenge: 
 
-2) Obstacle Challenge: 
+2) Obstacle Challenge: https://youtube.com/shorts/Kh2xObjqXJc?feature=share
 
 
 
