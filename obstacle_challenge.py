@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 
 
-# Inicijalizacija
+# initialization
 txt_factory.init()
 txt_factory.init_input_factory()
 txt_factory.init_motor_factory()
@@ -24,7 +24,7 @@ TXT_M_C1_motor_step_counter.set_motor(TXT_M_M1_encodermotor)
 
 txt_factory.initialized()
 
-
+# loading an image
 cam_port = 0
 video_capture = cv2.VideoCapture(cam_port)
 
@@ -34,10 +34,10 @@ RED_LOWER2 = np.array([170, 70, 50])
 RED_UPPER2 = np.array([180, 255, 255])
 GREEN_LOWER = np.array([40, 70, 50])
 GREEN_UPPER = np.array([80, 255, 255])
-MIN_PIXELS = 550
+MIN_PIXELS = 1200
 
 
-
+# color detection
 def detect_color(frame):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     height, width = frame.shape[:2]
@@ -69,9 +69,28 @@ def detect_color(frame):
         "right": check(right)
     }
     
+# identifying the closest color
+def close_color(frame):
+    
+    red_h1 = visina_red(frame)
+    green_h1 = visina_green(frame)
+    
+
+    if red_h1 > green_h1 and red_h1 > 0:
+        return "red"
+    elif green_h1 > 0:
+        return "green"
+    else:
+        return "unknown"
+    
+def visina_red(frame):
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    red_mask1 = cv2.inRange(hsv, RED_LOWER1, RED_UPPER1)
+    red_mask2 = cv2.inRange(hsv, RED_LOWER2, RED_UPPER2)
+    red_mask = cv2.bitwise_or(red_mask1, red_mask2)
 
 
-def max_height(mask):
+    def max_height(mask):
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         max_h = 0
         for c in contours:
@@ -79,65 +98,94 @@ def max_height(mask):
             if w * h > 1000 and h > max_h:
                 max_h = h
         return max_h
+   
+    return max_height(red_mask)
+
+def visina_green(frame):
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    green_mask = cv2.inRange(hsv, GREEN_LOWER, GREEN_UPPER)
+
+    def max_height(mask):
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        max_h = 0
+        for c in contours:
+            x, y, w, h = cv2.boundingRect(c)
+            if w * h > 1000 and h > max_h:
+                max_h = h
+        return max_h
+   
+    return max_height(green_mask)
+
   
 
 # Zaobilaženje prepreke na temelju boje i pozicije
-def zaobidji_prepreku(frame, boje):
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    red_mask1 = cv2.inRange(hsv, RED_LOWER1, RED_UPPER1)
-    red_mask2 = cv2.inRange(hsv, RED_LOWER2, RED_UPPER2)
-    red_mask = cv2.bitwise_or(red_mask1, red_mask2)
-    green_mask = cv2.inRange(hsv, GREEN_LOWER, GREEN_UPPER)
-    
-    hr=max_height(red_mask)
-    hg=max_height(green_mask)
-    print("crvena i zelena visina ", hr, hg)
-    boja_blizu = "unknown"
-    if hr > hg and hr > 0:
-        boja_blizu='red'
-    elif hg > 0:
-        boja_blizu= "green"
-    
-    print("Najbliza prepreka:", boja_blizu)   
+def zaobidji_prepreku():
+    for _ in range(5):  
+        video_capture.read()
+
+    ret, frame = video_capture.read()
+    boje = detect_color(frame)
     
 
-    if(boja_blizu=='green' and max_height(green_mask)>90 ):
-        print('zelena, idem lijevo')
-        print('lijevi senzor ', TXT_M_I3_ultrasonic_distance_meter.get_distance(), ' sredina ', TXT_M_I1_ultrasonic_distance_meter.get_distance(), ' desni senzor ', TXT_M_I5_ultrasonic_distance_meter.get_distance())
+    hr=visina_red(frame)
+    hg=visina_green(frame)
+    print("crvena i zelena visina ", hr, hg)
+      
+    boja_blizu=close_color(frame)
+    print("Najbliza prepreka:", boja_blizu) 
+
     
-        while(TXT_M_I3_ultrasonic_distance_meter.get_distance()>30 ):
-            print(max_height(green_mask))
-            TXT_M_S1_servomotor.set_position(275)
-            time.sleep(1)
-            print(TXT_M_I3_ultrasonic_distance_meter.get_distance())
-            
-            
-    if(boja_blizu=='red'  and max_height(red_mask)>90):
+    if(boja_blizu=='green' and hg>100 ): #provjeravanje boje prepreke i koliko je blizu
+            org_angle=270
+            print('zelena, idem lijevo')
+            print('lijevi senzor ', TXT_M_I3_ultrasonic_distance_meter.get_distance(), ' sredina ', TXT_M_I1_ultrasonic_distance_meter.get_distance(), ' desni senzor ', TXT_M_I5_ultrasonic_distance_meter.get_distance())
+
+            while(TXT_M_I3_ultrasonic_distance_meter.get_distance()>25 ):
+                print(TXT_M_I1_ultrasonic_distance_meter.get_distance(), TXT_M_I3_ultrasonic_distance_meter.get_distance())
+                TXT_M_S1_servomotor.set_position(org_angle)
+                time.sleep(0.7)
+                while(TXT_M_I1_ultrasonic_distance_meter.get_distance()<35 and TXT_M_I1_ultrasonic_distance_meter.get_distance()>15 and org_angle>=100 ):
+                    TXT_M_S1_servomotor.set_position(org_angle-15)
+                    time.sleep(0.3)
+                    org_angle=org_angle-15
+                if(TXT_M_I1_ultrasonic_distance_meter.get_distance()<20):
+                    TXT_M_S1_servomotor.set_position(50)
+                    time.sleep(1)
+                    break
+            print('gotova boja') 
+ 
+    if(boja_blizu=='red'  and hr>100):
+        org_angle=120
         print('crvena, idem desno')
         print('lijevi senzor ', TXT_M_I3_ultrasonic_distance_meter.get_distance(), ' sredina ', TXT_M_I1_ultrasonic_distance_meter.get_distance(), ' desni senzor ', TXT_M_I5_ultrasonic_distance_meter.get_distance())
-        while( TXT_M_I5_ultrasonic_distance_meter.get_distance()>25):
-            print(max_height(red_mask))
-            TXT_M_S1_servomotor.set_position(170)
-            time.sleep(1)
-            print(TXT_M_I5_ultrasonic_distance_meter.get_distance())
-            
+        while( TXT_M_I5_ultrasonic_distance_meter.get_distance()>25 ):
+            print(TXT_M_I1_ultrasonic_distance_meter.get_distance(), TXT_M_I5_ultrasonic_distance_meter.get_distance())
+            TXT_M_S1_servomotor.set_position(150)
+            time.sleep(0.7)  
+            while(TXT_M_I1_ultrasonic_distance_meter.get_distance()<35 and TXT_M_I1_ultrasonic_distance_meter.get_distance()>15 and org_angle<=350):
+                    TXT_M_S1_servomotor.set_position(org_angle+15)
+                    time.sleep(0.3)
+                    org_angle=org_angle+15
+            if(TXT_M_I1_ultrasonic_distance_meter.get_distance()<20):
+                    TXT_M_S1_servomotor.set_position(370)
+                    time.sleep(1)
+                    break
+      
+        print('gotova boja')  
     TXT_M_S1_servomotor.set_position(210)
-    time.sleep(1)
+    time.sleep(0.3)
 
     
 def skreni_desno():
     print("Skrecem desno za 90")
     print(TXT_M_I5_ultrasonic_distance_meter.get_distance())
-    TXT_M_S1_servomotor.set_position(50)  # Oštro lijevo
     TXT_M_M1_encodermotor.set_speed(150, TXT_M_M1_encodermotor.CCW)
-    #TXT_M_M1_encodermotor.start()
-    
-    time.sleep(0.5)  # Vozi udesno da se okrene (prilagodi po potrebi)
-    
-    #TXT_M_M1_encodermotor.stop()
+    TXT_M_S1_servomotor.set_position(50)  # Oštro lijevo
+    time.sleep(0.5)
+
     TXT_M_S1_servomotor.set_position(200)  # Vrati kotače ravno
     time.sleep(0.1)
-    while(TXT_M_I5_ultrasonic_distance_meter.get_distance()>70):
+    while(TXT_M_I5_ultrasonic_distance_meter.get_distance()>100):
        TXT_M_M1_encodermotor.set_speed(200, TXT_M_M1_encodermotor.CCW)
     
 def skreni_lijevo():
@@ -146,20 +194,14 @@ def skreni_lijevo():
 
     TXT_M_M1_encodermotor.set_speed(150, TXT_M_M1_encodermotor.CCW)
     TXT_M_S1_servomotor.set_position(350)  # Oštro lijevo
-    #TXT_M_M1_encodermotor.start()
+    time.sleep(2) 
     
-    time.sleep(2)  # Vozi udesno da se okrene (prilagodi po potrebi)
-    
-    #TXT_M_M1_encodermotor.stop()
     TXT_M_S1_servomotor.set_position(200)  # Vrati kotače ravno
     time.sleep(0.2)
     
-    while(TXT_M_I3_ultrasonic_distance_meter.get_distance()>50):
-       time.sleep(0.5)
-       print("ravno ", TXT_M_I3_ultrasonic_distance_meter.get_distance())
-    
-       TXT_M_M1_encodermotor.set_speed(260, TXT_M_M1_encodermotor.CCW)
-    print("zid ", TXT_M_I3_ultrasonic_distance_meter.get_distance())
+    while(TXT_M_I3_ultrasonic_distance_meter.get_distance()>100):
+      TXT_M_M1_encodermotor.set_speed(260, TXT_M_M1_encodermotor.CCW)
+   
 
 
 def prati_zid(counter):
@@ -168,25 +210,18 @@ def prati_zid(counter):
     TXT_M_M1_encodermotor.set_speed(160, TXT_M_M1_encodermotor.CCW)
     TXT_M_M1_encodermotor.start()
     print("Robot pokrenut...")
-   
-    while counter < 4:
-        ret, frame = video_capture.read()
-        if ret:
-            
-            boje = detect_color(frame)
-            #print(boje)
+    br=0
+    while counter < 12:
+        
+        if(br%5==0):
     
-            zaobidji_prepreku(frame, boje)
-            
-            
-        else:
-            print('greska')
+            zaobidji_prepreku()
+        br=br+1
 
-        lijevo=1
+        lijevo=5
         time.sleep(0.1)
-        print( "1Lijevi: ", TXT_M_I3_ultrasonic_distance_meter.get_distance(), "1Desni: ", TXT_M_I5_ultrasonic_distance_meter.get_distance())
-        #udaljenost=TXT_M_I3_ultrasonic_distance_meter.get_distance()
-        '''while(udaljenost<70 ):
+
+        while(TXT_M_I3_ultrasonic_distance_meter.get_distance()<200 and TXT_M_I5_ultrasonic_distance_meter.get_distance()<200):
             if(TXT_M_I3_ultrasonic_distance_meter.get_distance()<10):
                 TXT_M_S1_servomotor.set_position(120)
                 time.sleep(0.1)
@@ -197,60 +232,88 @@ def prati_zid(counter):
                 time.sleep(0.1)
                 TXT_M_S1_servomotor.set_position(200)
                 time.sleep(0.1)
-            if(TXT_M_I5_ultrasonic_distance_meter.get_distance()>70):
+            if(TXT_M_I5_ultrasonic_distance_meter.get_distance()>200):
                 lijevo=0
+                skreni_desno()
+                counter=counter+1
                 break
-            if(TXT_M_I3_ultrasonic_distance_meter.get_distance()>70):
+            if(TXT_M_I3_ultrasonic_distance_meter.get_distance()>200):
                 lijevo=1
                 skreni_lijevo()
                 counter=counter+1
                 break
-        print( "2Lijevi: ", TXT_M_I3_ultrasonic_distance_meter.get_distance(), "2Desni: ", TXT_M_I5_ultrasonic_distance_meter.get_distance())
-        print(lijevo)'''
-
-            # Održavanje udaljenosti od zida
+        
+        # Održavanje udaljenosti od zida
         if(lijevo == 0):
 
 
-                if TXT_M_I5_ultrasonic_distance_meter.get_distance() > 100 :
+            if TXT_M_I5_ultrasonic_distance_meter.get_distance() > 200:
+                    TXT_M_S1_servomotor.set_position(300)
+                    time.sleep(0.3)
                     skreni_desno()
                     counter = counter + 1
+
+            if TXT_M_I5_ultrasonic_distance_meter.get_distance() <20 and TXT_M_I5_ultrasonic_distance_meter.get_distance()<TXT_M_I3_ultrasonic_distance_meter.get_distance():  # Preblizu
+                    TXT_M_S1_servomotor.set_position(300) 
+                    time.sleep(0.5)
+                    print('ispravljam se jako u lijevo')
                     
-                if TXT_M_I5_ultrasonic_distance_meter.get_distance() < 30 and TXT_M_I1_ultrasonic_distance_meter.get_distance()>40:  # Preblizu
-                    TXT_M_S1_servomotor.set_position(270)
-                    time.sleep(0.3)  # malo lijevo
-                elif TXT_M_I5_ultrasonic_distance_meter.get_distance()> 70 and TXT_M_I1_ultrasonic_distance_meter.get_distance()>40:  # Predaleko
-                    TXT_M_S1_servomotor.set_position(120) # malo desno
+
+                    
+            elif TXT_M_I5_ultrasonic_distance_meter.get_distance() <50  and TXT_M_I5_ultrasonic_distance_meter.get_distance()<TXT_M_I3_ultrasonic_distance_meter.get_distance():  # Preblizu
+                    TXT_M_S1_servomotor.set_position(250)  
                     time.sleep(0.3)
-                else:
-                    TXT_M_S1_servomotor.set_position(200)
-                    time.sleep(0.3)  # ravno
+                    print('ispravljam se malo u lijevo')
+            if TXT_M_I5_ultrasonic_distance_meter.get_distance() > 70:  # Predaleko
+                    TXT_M_S1_servomotor.set_position(90)  
+                    time.sleep(0.5)
+                    print('ispravljam se jako u desno')
+
+            elif TXT_M_I3_ultrasonic_distance_meter.get_distance() > 50:  # Predaleko
+                    TXT_M_S1_servomotor.set_position(140)  
+                    time.sleep(0.3)
+                    print('ispravljam se malo u desno')
+
+            else:
+                    TXT_M_S1_servomotor.set_position(210)  
+                    time.sleep(0.3)
 
                 
                 
                 
         if(lijevo==1):
-                if TXT_M_I3_ultrasonic_distance_meter.get_distance() > 100:
-                    print( "Lijevi: ", TXT_M_I3_ultrasonic_distance_meter.get_distance(), "Desni: ", TXT_M_I5_ultrasonic_distance_meter.get_distance())
+                if TXT_M_I3_ultrasonic_distance_meter.get_distance() > 200:
                     TXT_M_S1_servomotor.set_position(120)
                     time.sleep(0.3)
-                
                     skreni_lijevo()
                     counter = counter + 1
-                    
-                if TXT_M_I3_ultrasonic_distance_meter.get_distance() <40 and TXT_M_I1_ultrasonic_distance_meter.get_distance()>40:  # Preblizu
-                    TXT_M_S1_servomotor.set_position(120)  # malo desno
-                    time.sleep(0.3)
 
-                elif TXT_M_I3_ultrasonic_distance_meter.get_distance() > 60 and TXT_M_I1_ultrasonic_distance_meter.get_distance()>40:  # Predaleko
-                    TXT_M_S1_servomotor.set_position(250)  # malo lijevo
+                if TXT_M_I3_ultrasonic_distance_meter.get_distance() <20 and TXT_M_I5_ultrasonic_distance_meter.get_distance()>TXT_M_I3_ultrasonic_distance_meter.get_distance():  # Preblizu
+                    TXT_M_S1_servomotor.set_position(90)  
+                    time.sleep(0.5)
+                    print('ispravljam se jako u desno')
+                    
+
+                    
+                elif TXT_M_I3_ultrasonic_distance_meter.get_distance() <50  and TXT_M_I5_ultrasonic_distance_meter.get_distance()>TXT_M_I3_ultrasonic_distance_meter.get_distance():  # Preblizu
+                    TXT_M_S1_servomotor.set_position(140)  
                     time.sleep(0.3)
+                    print('ispravljam se malo u desno')
+                if TXT_M_I3_ultrasonic_distance_meter.get_distance() > 70:  # Predaleko
+                    TXT_M_S1_servomotor.set_position(300)  
+                    time.sleep(0.5)
+                    print('ispravljam se jako u lijevo')
+
+                elif TXT_M_I3_ultrasonic_distance_meter.get_distance() > 50:  # Predaleko
+                    TXT_M_S1_servomotor.set_position(250) 
+                    time.sleep(0.1)
+                    print('ispravljam se malo u lijevo')
 
                 else:
-                    TXT_M_S1_servomotor.set_position(200)  # ravno
-                    time.sleep(0.3)
+                    TXT_M_S1_servomotor.set_position(200)  
+                    time.sleep(0.1)
                             
-                
+        print(TXT_M_I3_ultrasonic_distance_meter.get_distance(), TXT_M_I1_ultrasonic_distance_meter.get_distance(), TXT_M_I5_ultrasonic_distance_meter.get_distance())        
 
             
 
@@ -261,5 +324,4 @@ def prati_zid(counter):
 # Glavni program
 if __name__ == '__main__':
     counter = 0
-    time.sleep(0.5)
     prati_zid(counter)
