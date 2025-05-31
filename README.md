@@ -126,34 +126,31 @@ We implemented step-based turning logic using **a counter variable** to track th
 When it detects a corner, it triggers a turning function `turn_left()` or `turn_right()` that uses the servomotor for steering and the encoder motor for movement. This modular approach allows the robot to navigate around the central box by following walls and turning only when necessary.
 
 ```python
-def skreni_lijevo():
-    print("Skrecem lijevo za 90")
+def turn_left():
+    print("Left turn for 90")
     print(TXT_M_I3_ultrasonic_distance_meter.get_distance())
     TXT_M_M1_encodermotor.set_speed(150, TXT_M_M1_encodermotor.CCW)
-    TXT_M_S1_servomotor.set_position(350)  #sharp left
-    #TXT_M_M1_encodermotor.start()
-    time.sleep(2)  # drive to the right
-    #TXT_M_M1_encodermotor.stop()
-    TXT_M_S1_servomotor.set_position(200)  #puts wheels back to the straight position
+    TXT_M_S1_servomotor.set_position(350)  # sharp left
+    time.sleep(2)
+    
+    TXT_M_S1_servomotor.set_position(210)  # wheels in neutral
     time.sleep(0.2)
-    while(TXT_M_I3_ultrasonic_distance_meter.get_distance()>50):
-       time.sleep(0.5)
-       print("ravno ", TXT_M_I3_ultrasonic_distance_meter.get_distance())
+    
+    while(TXT_M_I3_ultrasonic_distance_meter.get_distance()>100):
        TXT_M_M1_encodermotor.set_speed(260, TXT_M_M1_encodermotor.CCW)
-    print("zid ", TXT_M_I3_ultrasonic_distance_meter.get_distance())
 ```
 
 We than used the counter to measure when **three full laps** have been completed. When it reaches 12, it stops at the starting point.
 
 ```python
 while (counter < 12):
-    if lijevo == 0:
+    if left == 0:
         if TXT_M_I5_ultrasonic_distance_meter.get_distance() > 50:
-            skreni_desno()
+            turn_right()
             counter=counter + 1
-    if lijevo == 1:
+    if left == 1:
         if TXT_M_I3_ultrasonic_distance_meter.get_distance() > 50:
-            skreni_lijevo()
+            turn_left()
             counter=counter + 1
 ```
 
@@ -182,21 +179,14 @@ The `max_height()` function calculates the height of the tallest detected colore
 Combining the HSV value of red and green and the height of the shape the camera sees, we counted **the number of pixels**. We used this logic to determine which obstacle is the closest to the robot, meaning the bigger number of pixels of a certain color point to the traffic sign in front of the camera. 
 
 ```python
-def zaobidji_prepreku(frame, boje):
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    red_mask1 = cv2.inRange(hsv, RED_LOWER1, RED_UPPER1)
-    red_mask2 = cv2.inRange(hsv, RED_LOWER2, RED_UPPER2)
-    red_mask = cv2.bitwise_or(red_mask1, red_mask2)
-    green_mask = cv2.inRange(hsv, GREEN_LOWER, GREEN_UPPER)
-    
-    hr=max_height(red_mask)
-    hg=max_height(green_mask)
-    print("crvena i zelena visina ", hr, hg)
-    boja_blizu = "unknown"
-    if hr > hg and hr > 0:
-        boja_blizu='red'
-    elif hg > 0:
-        boja_blizu= "green"
-    
-    print("Najbliza prepreka:", boja_blizu)
+def avoid_obstacle():
+    for _ in range(5):  
+        video_capture.read()
+    ret, frame = video_capture.read()
+    boje = detect_color(frame)
+    hr=height_red(frame)
+    hg=height_green(frame)
+    print("red and green height ", hr, hg)
+    color_near=close_color(frame)
+    print("The closest obstacle:", color_near)
 ```
