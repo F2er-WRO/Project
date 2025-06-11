@@ -81,6 +81,11 @@ To start the robot in a way the rules of the competition provide, we followed th
 ## Mobility Management 
 We decided to use the official `fischertechnik STEM Coding Competition kit`, which was specifically developed for this "Future Engineers" competition category of the World Robot Olympiad. The base was assembled strictly following the official step-by-step instructions provided in the manual, ensuring stable construction, proper wheel alignment, and optimal weight distribution.
 
+The image displays the specifications of the components used from the specified set.
+<p align="center">
+  <img src="images/fischertechnik_set_parts.jpg" alt="Set parts" width="300"/>
+</p>  
+
 The drive motor is initialized using the encoder motor factory. Additionally, a motor step counter is created and linked to the encoder motor to track the number of steps taken during movement. 
 
 The steering mechanism is controlled by a separate servomotor **Micro Servo 4.8/6V**, which allows the robot to adjust its direction in real time based on obstacle detection and navigation logic.
