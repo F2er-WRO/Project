@@ -10,6 +10,8 @@ Team information:
 
 •	Members: Ana Petrović, Bruna Vlatković, Patrik Vranješ
 
+•	Mentor: Ana Sović Kržić
+
 •	Organization: Faculty of Electrical Engineering and Computing
 
 •	Country: Zagreb, Croatia
@@ -81,7 +83,7 @@ To start the robot in a way the rules of the competition provide, we followed th
 ## Mobility Management 
 We decided to use the official `fischertechnik STEM Coding Competition kit`, which was specifically developed for this "Future Engineers" competition category of the World Robot Olympiad. The base was assembled strictly following the official step-by-step instructions provided in the manual, ensuring stable construction, proper wheel alignment, and optimal weight distribution.
 
-The image displays the specifications of the components used from the specified set.
+The image displays **the specifications of the components** used from the specified set.
 <p align="center">
   <img src="images/fischertechnik_set_parts.jpg" alt="Set parts" width="300"/>
 </p>  
@@ -117,6 +119,13 @@ The robot has **three ultrasonic sensors**, each connected to a different port: 
 Each sensor consists of a dual transducer that sends and receives ultrasonic pulses, enabling accurate distance calculations in real time. The sensors were securely connected using the standard plug-and-cable system provided in the kit, following the official `fischertechnik` assembly guidelines. 
 
 Their placement was chosen to provide full coverage on three sides of the robot, ensuring it can orient itself within confined environments and react to dynamic obstacles.
+
+Here is a simplified version of the **electrical scheme** of our robot:
+<p align="center">
+  <img src="images/electrical_scheme.png" alt="Scheme" width="300"/>
+</p>  
+
+
 
 
 ## Obstacle Detection
