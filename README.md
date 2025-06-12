@@ -122,7 +122,7 @@ Their placement was chosen to provide full coverage on three sides of the robot,
 
 Here is a simplified version of the **electrical scheme** of our robot:
 <p align="center">
-  <img src="images/electrical_scheme.png" alt="Scheme" width="300"/>
+  <img src="images/el_scheme.png" alt="Electrical scheme" width="300"/>
 </p>  
 
 
@@ -135,7 +135,7 @@ For the Open Challenge, our idea was to let the robot check the distances from t
 
 The logic behind the programming approach is shown in the flow diagram.
 <p align="center">
-<img src="images/flow.png" alt="Flow" width="300"/>
+<img src="images/flow_dia.png" alt="Flow diagram" width="300"/>
 </p>  
 
 
