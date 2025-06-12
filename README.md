@@ -122,7 +122,13 @@ Their placement was chosen to provide full coverage on three sides of the robot,
 ## Obstacle Detection
 ### Step-Based Turning Logic
 
-For the Open Challenge, our idea was to let the robot check the distances from the left and right sensors, compare them, and choose **the smaller one which means the robot is closer to the inner wall on that side**. Then it adjusts its path to go around that side.
+For the Open Challenge, our idea was to let the robot check the distances from the left and right sensors, compare them, and choose **the smaller one which means the robot is closer to the inner wall on that side**. Then it adjusts its path to go around that side. 
+
+The logic behind the programming approach is shown in the diagram as a flowchart.
+<p align="center">
+<img src="images/flow.png" alt="Flowchart" width="300"/>
+
+
 
 We spent time testing and adjusting values like driving speed, turning speed, and how sharp the turns are, to make everything run smoothly. 
 
