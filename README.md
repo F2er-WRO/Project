@@ -133,7 +133,7 @@ Here is a simplified version of the **electrical scheme** of our robot:
 
 For the Open Challenge, our idea was to let the robot check the distances from the left and right sensors, compare them, and choose **the smaller one which means the robot is closer to the inner wall on that side**. Then it adjusts its path to go around that side. 
 
-The logic behind the programming approach is shown in the diagram as a flowchart.
+The logic behind the programming approach is shown in the flow diagram.
 <p align="center">
 <img src="images/flow.png" alt="Flow" width="300"/>
 </p>  
