@@ -126,7 +126,7 @@ For the Open Challenge, our idea was to let the robot check the distances from t
 
 The logic behind the programming approach is shown in the diagram as a flowchart.
 <p align="center">
-<img src="images/flow.png" alt="Flowchart" width="300"/>
+<img src="images/flow.png" alt="Flow" width="300"/>
 </p>  
 
 
