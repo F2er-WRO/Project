@@ -131,7 +131,7 @@ Here is a simplified version of the **electrical scheme** of our robot:
 ## Obstacle Detection
 ### Step-Based Turning Logic
 
-For the Open Challenge, our idea was to let the robot check the distances from the left and right sensors, compare them, and choose **the smaller one which means the robot is closer to the inner wall on that side**. Then it adjusts its path to go around that side. 
+For the **Open Challenge**, our initial idea was to let the robot check the distances from the left and right sensors, compare them, and choose **the smaller one which means the robot is closer to the inner wall on that side**. Then it adjusts its path to go around that side. 
 
 The logic behind the programming approach is shown in the flow diagram.
 <p align="center">
@@ -178,9 +178,36 @@ while (counter < 12):
 
 In this project, we used the `OpenCV library` for computer vision to detect obstacles of specific colors and to measure their height within the camera frame.
 
-Before detecting the color, we convert each frame from the default **BGR (Blue, Green, Red)** format to the **HSV (Hue, Saturation, Value)** color space. This improves color detection accuracy under different lighting conditions by separating color (hue) from brightness (value). This way we made sure that the color detection does not depend on the brightness and lighting in the room. 
+Before detecting the color, we convert each frame from the default **BGR (Blue, Green, Red)** format to the **HSV (Hue, Saturation, Value)** color space. This improves color detection accuracy under different lighting conditions by separating color (hue) from brightness (value). This way we made sure that the color detection does not depend on the brightness and lighting in the room.
 
-We define specific HSV value ranges for detecting **red** and **green** regions. Red is split into two ranges due to its position at both ends of the hue spectrum:
+After developing the **color recognition logic based on pixel counting**, we concluded that we could try implementing this logic for turns and direction decisions in the **Open Challenge**. The color of the line at the turn that the robot detects first we called the main color. Based on this color, the robot turns in the predefined direction. If the main color is **blue**, it turns left; if the main color is **orange**, it turns right. 
+
+```python
+orange_lower_hsv = np.array([5, 100, 100])  
+orange_upper_hsv = np.array([25, 255, 255])
+
+blue_lower_hsv = np.array([100, 150, 50])  
+blue_upper_hsv = np.array([130, 255, 255])
+
+def zavoj_boja(frame):
+    hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    mask_orange = cv2.inRange(hsv_frame, orange_lower_hsv, orange_upper_hsv)
+    mask_blue = cv2.inRange(hsv_frame, blue_lower_hsv, blue_upper_hsv)
+    #we count the pixels in the masks
+    blue_pixels = cv2.countNonZero(mask_blue)
+    orange_pixels = cv2.countNonZero(mask_orange)
+    print('plavi pikseli ', blue_pixels, 'narancasti pikseli ', orange_pixels)
+    #compare the number of pixels and return the color with the higher pixel count
+    if orange_pixels > blue_pixels:
+        return "orange"
+    else:
+        return "blue"
+```
+
+While navigating around the inner wall, we wanted the robot to maintain a consistent distance from the inner wall. To enable this, we created a variable called `udaljenost_prva` (translated as initial_distance), in which we stored the sensor reading at the starting point from either the left or right side, depending on the main color. This helped us improve the accuracy of returning to the starting position after completing three laps.
+
+
+For the **Obstacle Challenge**, we also need to define specific HSV value ranges for detecting **red** and **green** regions. Red is split into two ranges due to its position at both ends of the hue spectrum:
 
 ```python
 RED_LOWER1 = np.array([0, 70, 50])
@@ -210,3 +237,4 @@ def avoid_obstacle():
     color_near=close_color(frame)
     print("The closest obstacle:", color_near)
 ```
+
